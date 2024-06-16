@@ -25,8 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.foxminded.car_rest_service.model.Car;
-import com.foxminded.car_rest_service.model.Category;
+import com.foxminded.car_rest_service.model.entity.Car;
+import com.foxminded.car_rest_service.model.entity.Category;
 import com.foxminded.car_rest_service.service.CarService;
 import com.foxminded.car_rest_service.service.CategoryService;
 

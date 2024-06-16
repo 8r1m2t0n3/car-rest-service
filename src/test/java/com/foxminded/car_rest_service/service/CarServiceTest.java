@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.foxminded.car_rest_service.model.Car;
+import com.foxminded.car_rest_service.model.entity.Car;
 import com.foxminded.car_rest_service.repository.CarRepository;
 
 @ExtendWith(MockitoExtension.class)

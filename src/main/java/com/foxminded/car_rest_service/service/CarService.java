@@ -1,94 +1,92 @@
 package com.foxminded.car_rest_service.service;
 
+import com.foxminded.car_rest_service.model.dto.CarCreationDto;
+import com.foxminded.car_rest_service.model.entity.Category;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import com.foxminded.car_rest_service.model.Car;
+import com.foxminded.car_rest_service.model.entity.Car;
 import com.foxminded.car_rest_service.repository.CarRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
-
+@Slf4j
 @Service
+@AllArgsConstructor
+@Transactional(readOnly = true)
 public class CarService {
 
-	private CarRepository carRepository;
+  private final CarRepository carRepository;
+  private final CategoryService categoryService;
 
-	private Logger logger = LoggerFactory.getLogger(CarService.class);
-	private Random random = new Random();
+  @Transactional
+  public Car save(CarCreationDto carCreationDto) {
+    Car car = Car.builder()
+        .objectId(UUID.randomUUID().toString())
+        .brand(carCreationDto.getBrand())
+        .model(carCreationDto.getModel())
+        .year(carCreationDto.getYear())
+        .build();
 
-	private static final String OBJECT_ID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (Category category : carCreationDto.getCategories()) {
+      Optional<Category> categoryOptional = categoryService.getByName(category.getName());
+      if (categoryOptional.isEmpty()) {
+        categoryService.save(category);
+        car.getCategories().add(category);
+      } else {
+        car.getCategories().add(categoryOptional.get());
+      }
+    }
 
-	public CarService(CarRepository carRepository) {
-		this.carRepository = carRepository;
-	}
+    carRepository.save(car);
+    log.info("Saved car with objectId: {}", car.getObjectId());
+    return car;
+  }
 
-	@Transactional
-	public Car save(Car car) {
-		carRepository.save(car);
-		logger.info("Saved car with objectId: {}", car.getObjectId());
-		return car;
-	}
+  public Optional<Car> getById(Long id) {
+    return carRepository.findById(id);
+  }
 
-	public Optional<Car> getById(Long id) {
-		return carRepository.findById(id);
-	}
+  public Optional<Car> getByObjectId(String objectId) {
+    return carRepository.findByObjectId(objectId);
+  }
 
-	public Optional<Car> getByObjectId(String objectId) {
-		return carRepository.findByObjectId(objectId);
-	}
+  public List<Car> getByBrand(String brand) {
+    return carRepository.findByBrand(brand);
+  }
 
-	public List<Car> getByBrand(String brand) {
-		return carRepository.findByBrand(brand);
-	}
+  public List<Car> getByBrandAndModel(String brand, String model) {
+    return carRepository.findByBrandAndModel(brand, model);
+  }
 
-	public List<Car> getByMinYearAndMaxYear(Year minYear, Year maxYear) {
-		return carRepository.findByMinYearAndMaxYear(minYear, maxYear);
-	}
+  public List<Car> getByMinYearAndMaxYear(Year minYear, Year maxYear) {
+    return carRepository.findByMinYearAndMaxYear(minYear, maxYear);
+  }
 
-	public List<Car> getAll() {
-		return carRepository.findAll();
-	}
+  public List<Car> getAll() {
+    return carRepository.findAll();
+  }
 
-	@Transactional
-	public Car update(Car car, Long id) {
-		car.setId(id);
-		carRepository.save(car);
-		logger.info("Updated car with id: {}", car.getId());
-		return car;
-	}
+  @Transactional
+  public Car update(Car car, Long id) {
+    car.setId(id);
+    carRepository.save(car);
+    log.info("Updated car with id: {}", car.getId());
+    return car;
+  }
 
-	@Transactional
-	public void deleteById(Long id) {
-		carRepository.deleteById(id);
-		logger.info("Deleted car with id: {}", id);
-	}
+  @Transactional
+  public void deleteById(Long id) {
+    carRepository.deleteById(id);
+    log.info("Deleted car with id: {}", id);
+  }
 
-	@Transactional
-	public void deleteByObjectId(String objectId) {
-		carRepository.deleteByObjectId(objectId);
-		logger.info("Deleted car with objectId: {}", objectId);
-	}
-
-	public String generateUniqueObjectId() {
-		StringBuilder objectId = new StringBuilder();
-
-		for (int i = 0; i < 10; i++) {
-			objectId.append(OBJECT_ID_CHARACTERS.charAt(random.nextInt(OBJECT_ID_CHARACTERS.length())));
-		}
-		logger.info("Generated objectId: {}", objectId);
-
-		if (carRepository.findByObjectId(objectId.toString()).isPresent()) {
-			logger.warn("Generated objectId: {} is not unique, regeneration required", objectId);
-			return null;
-		}
-		logger.info("Uniqueness of objectId: {} is confirmed", objectId);
-
-		return objectId.toString();
-	}
+  @Transactional
+  public void deleteByObjectId(UUID objectId) {
+    carRepository.deleteByObjectId(objectId.toString());
+    log.info("Deleted car with objectId: {}", objectId);
+  }
 }

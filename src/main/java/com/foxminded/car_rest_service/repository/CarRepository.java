@@ -8,12 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.foxminded.car_rest_service.model.Car;
+import com.foxminded.car_rest_service.model.entity.Car;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
 	List<Car> findByBrand(String brand);
+
+	List<Car> findByBrandAndModel(String brand, String model);
 
 	Optional<Car> findByObjectId(String objectId);
 

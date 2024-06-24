@@ -1,54 +1,22 @@
 package com.foxminded.car_rest_service.service;
 
+import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
+import com.foxminded.car_rest_service.model.dto.category.CategoryCreationDto;
+import com.foxminded.car_rest_service.model.dto.category.CategoryDto;
+import com.foxminded.car_rest_service.model.dto.category.CategoryUpdateDto;
 import java.util.List;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import com.foxminded.car_rest_service.model.entity.Category;
-import com.foxminded.car_rest_service.repository.CategoryRepository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
-@Service
-@Transactional(readOnly = true)
-public class CategoryService {
+public interface CategoryService {
 
-  private final CategoryRepository categoryRepository;
+   CategoryDto save(CategoryCreationDto categoryCreationDto);
 
-  public CategoryService(CategoryRepository categoryRepository) {
-    this.categoryRepository = categoryRepository;
-  }
+   CategoryDto getById(Long id);
 
-  @Transactional
-  public Category save(Category category) {
-    categoryRepository.save(category);
-    log.info("Saved category with name: {}", category.getName());
-    return category;
-  }
+   CategoryDto getByName(String name);
 
-  public Optional<Category> getById(Long categoryId) {
-    return categoryRepository.findById(categoryId);
-  }
+   List<CategoryDto> getAll();
 
-  public Optional<Category> getByName(String categoryName) {
-    return categoryRepository.findByName(categoryName);
-  }
+  CategoryDto update(Long id, CategoryUpdateDto categoryUpdateDto);
 
-  public List<Category> getAll() {
-    return categoryRepository.findAll();
-  }
-
-  @Transactional
-  public Category update(Category category, Long categoryId) {
-    category.setId(categoryId);
-    categoryRepository.save(category);
-    log.info("Updated category with id: {}", category.getId());
-    return category;
-  }
-
-  @Transactional
-  public void deleteById(Long categoryId) {
-    categoryRepository.deleteById(categoryId);
-    log.info("Deleted category with id: {}", categoryId);
-  }
+   void deleteById(Long id);
 }

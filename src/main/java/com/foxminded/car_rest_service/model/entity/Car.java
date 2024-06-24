@@ -3,7 +3,6 @@ package com.foxminded.car_rest_service.model.entity;
 import java.time.Year;
 import java.util.List;
 import java.util.Objects;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,11 +29,11 @@ public class Car {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Schema(description = "Unique id for DB")
+  @Schema(description = "Unique id in DB")
   private Long id;
 
   @Column(name = "object_id")
-  @Schema(description = "Unique object id")
+  @Schema(description = "Unique sequence of characters and numbers")
   private String objectId;
 
   @Column(name = "model")

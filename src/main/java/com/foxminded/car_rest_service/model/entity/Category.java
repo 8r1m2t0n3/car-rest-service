@@ -1,7 +1,6 @@
 package com.foxminded.car_rest_service.model.entity;
 
 import java.util.Objects;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,28 +20,25 @@ import lombok.Setter;
 @Setter
 public class Category {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Schema(description = "Unique id for DB")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Schema(description = "Unique id in DB")
+  private Long id;
 
-	@Column(name = "name")
-	@Size(min = 0, max = 32)
-	@Schema(description = "Category name")
-	private String name;
+  @Column(name = "name")
+  @Size(min = 0, max = 32)
+  @Schema(description = "Category name")
+  private String name;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (!(o instanceof Category))
-			return false;
-		Category category = (Category) o;
-		return Objects.equals(this.id, category.id) && Objects.equals(this.name, category.name);
-	}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Category category)) return false;
+    return Objects.equals(this.id, category.id) && Objects.equals(this.name, category.name);
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(this.id, this.name);
-	}
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.id, this.name);
+  }
 }

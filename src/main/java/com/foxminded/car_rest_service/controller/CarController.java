@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.foxminded.car_rest_service.service.CarService;
-import com.foxminded.car_rest_service.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,7 +25,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class CarController {
 
   private final CarService carService;
-  private final CategoryService categoryService;
 
   @GetMapping
   @Operation(summary = "Get all cars")
@@ -92,18 +89,18 @@ public class CarController {
     return carService.save(carCreationDto);
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{objectId}")
   @Operation(
       summary = "Delete car by objectId",
       security = @SecurityRequirement(name = "bearerAuth"))
   public void deleteByObjectId(
-      @Parameter(description = "Unique object id") @RequestParam("object-id") String objectId) {
+      @Parameter(description = "Unique object id") @PathVariable String objectId) {
     carService.deleteByObjectId(objectId);
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{id}")
   @Operation(summary = "Delete car by id", security = @SecurityRequirement(name = "bearerAuth"))
-  public void deleteById(@Parameter(description = "DB id") @RequestParam("id") Long id) {
+  public void deleteById(@Parameter(description = "DB id") @PathVariable Long id) {
     carService.deleteById(id);
   }
 }

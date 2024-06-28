@@ -10,14 +10,12 @@ import com.foxminded.car_rest_service.repository.CategoryRepository;
 import com.foxminded.car_rest_service.service.CategoryService;
 import com.foxminded.car_rest_service.util.mapper.CategoryMapper;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
@@ -28,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
   @Override
   public CategoryDto save(CategoryCreationDto categoryCreationDto) {
     Category category = categoryRepository.save(categoryMapper.toEntity(categoryCreationDto));
-    log.info("Saved category with name: {}", categoryCreationDto.getName());
     return categoryMapper.toDto(category);
   }
 
@@ -57,7 +54,6 @@ public class CategoryServiceImpl implements CategoryService {
     Category category = categoryMapper.toEntity(categoryUpdateDto);
     category.setId(id);
     categoryRepository.save(category);
-    log.info("Updated category with id: {}", category.getId());
     return categoryMapper.toDto(category);
   }
 
@@ -65,6 +61,5 @@ public class CategoryServiceImpl implements CategoryService {
   @Override
   public void deleteById(Long id) {
     categoryRepository.deleteById(id);
-    log.info("Deleted category with id: {}", id);
   }
 }

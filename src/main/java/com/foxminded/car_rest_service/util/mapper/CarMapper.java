@@ -1,12 +1,13 @@
 package com.foxminded.car_rest_service.util.mapper;
 
+import com.foxminded.car_rest_service.config.MapperConfig;
 import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.car.CarDto;
 import com.foxminded.car_rest_service.model.dto.car.CarUpdateDto;
 import com.foxminded.car_rest_service.model.entity.Car;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(config = MapperConfig.class)
 public interface CarMapper {
    Car toEntity(CarDto carDto);
    Car toEntity(CarCreationDto carCreationDto);

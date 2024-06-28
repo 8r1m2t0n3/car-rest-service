@@ -32,6 +32,4 @@ public interface CarService {
   void deleteById(Long id);
 
   void deleteByObjectId(String objectId);
-
-  void bindCategoriesWithCarAndSave(CarCreationDto carCreationDto);
 }

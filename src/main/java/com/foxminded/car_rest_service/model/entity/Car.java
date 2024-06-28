@@ -44,7 +44,7 @@ public class Car {
   @Size(min = 0, max = 32)
   private String brand;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   @JoinTable(
       name = "car_category",
       joinColumns = @JoinColumn(name = "car_id"),

@@ -10,5 +10,5 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class CategoryUpdateDto {
-  private final String name;
+  private String name;
 }

@@ -1,25 +1,27 @@
 version: '3'
 services:
-  backend:
-    container_name: backend
-    hostname: backend
-    depends_on:
-      - keycloak
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cardb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    build: ./
-    ports:
-      - 8080:8080
-    networks:
-      - keycloak-net
-    entrypoint: [ "java", "-Xms512m", "-Xmx1g", "-jar", "app.jar", "--debug" ]
+
+  #  backend:
+  #    container_name: backend
+  #    hostname: car-rest-service
+  #    depends_on:
+  #      - keycloak
+  #      - db
+  #    environment:
+  #      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cardb
+  #      SPRING_DATASOURCE_USERNAME: postgres
+  #      SPRING_DATASOURCE_PASSWORD: password
+  #      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  #    build: ./
+  #    ports:
+  #      - 8080:8080
+  #    networks:
+  #      - keycloak-net
+  #    entrypoint: [ "java", "-Xms512m", "-Xmx1g", "-jar", "app.jar", "--debug" ]
+
   keycloak:
     image: quay.io/keycloak/keycloak:22.0
-    container_name: keycloak
+    container_name: car-rest-service-keycloak
     hostname: keycloak
     ports:
       - 9080:9080
@@ -32,16 +34,25 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 9080
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm" ]
-  db:
-    image: postgres
-    container_name: db
-    hostname: db
+
+  database-postgres:
+    container_name: car-rest-service-db
+    hostname: car-rest-service-db
+    image: "postgres:16"
+    ports:
+      - "5434:5432"
     networks:
       - keycloak-net
     environment:
-       POSTGRES_DB: cardb
-       POSTGRES_USER: postgres
-       POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: car-db
+      POSTGRES_PASSWORD: postgres_password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   keycloak-net: { }
       

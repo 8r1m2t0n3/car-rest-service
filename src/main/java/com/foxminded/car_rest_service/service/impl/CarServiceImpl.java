@@ -7,9 +7,7 @@ import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.car.CarDto;
 import com.foxminded.car_rest_service.model.dto.car.CarUpdateDto;
 import com.foxminded.car_rest_service.model.dto.category.CategoryCreationDto;
-import com.foxminded.car_rest_service.model.dto.category.CategoryDto;
 import com.foxminded.car_rest_service.model.entity.Car;
-import com.foxminded.car_rest_service.model.entity.Category;
 import com.foxminded.car_rest_service.repository.CarRepository;
 import com.foxminded.car_rest_service.service.CarService;
 import com.foxminded.car_rest_service.service.CategoryService;
@@ -18,15 +16,13 @@ import com.foxminded.car_rest_service.util.mapper.CarMapper;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CarServiceImpl implements CarService {
 
@@ -40,8 +36,6 @@ public class CarServiceImpl implements CarService {
   @Transactional
   @Override
   public CarDto save(CarCreationDto carCreationDto) {
-    bindCategoriesWithCarAndSave(carCreationDto);
-
     Car car = carMapper.toEntity(carCreationDto);
 
     if (Optional.ofNullable(carCreationDto.getObjectId()).isEmpty()) {
@@ -49,7 +43,6 @@ public class CarServiceImpl implements CarService {
     }
 
     carRepository.save(car);
-    log.info("Saved car with generated objectId: {}", car.getObjectId());
     return carMapper.toDto(car);
   }
 
@@ -110,7 +103,6 @@ public class CarServiceImpl implements CarService {
     Car car = carMapper.toEntity(carUpdateDto);
     car.setId(id);
     carRepository.save(car);
-    log.info("Updated car with id: {}", id);
     return carMapper.toDto(carUpdateDto);
   }
 
@@ -118,27 +110,11 @@ public class CarServiceImpl implements CarService {
   @Override
   public void deleteById(Long id) {
     carRepository.deleteById(id);
-    log.info("Deleted car with id: {}", id);
   }
 
   @Transactional
   @Override
   public void deleteByObjectId(String objectId) {
     carRepository.deleteByObjectId(objectId);
-    log.info("Deleted car with objectId: {}", objectId);
-  }
-
-  @Transactional
-  @Override
-  public void bindCategoriesWithCarAndSave(CarCreationDto carCreationDto) {
-    for (CategoryCreationDto category : carCreationDto.getCategories()) {
-      try {
-        categoryService.getByName(category.getName());
-        carCreationDto.getCategories().add(category);
-      } catch (CategoryByNameNotFoundException e) {
-        categoryService.save(category);
-        carCreationDto.getCategories().add(category);
-      }
-    }
   }
 }

@@ -34,7 +34,7 @@ public class AppStartupListener implements ApplicationListener<ContextRefreshedE
   private String carsBackupFilePath;
 
   public void readCsvFile() throws IOException {
-    if (carService.getAll().isEmpty() && categoryService.getAll().isEmpty()) {
+    if (carService.getAll().isEmpty() || categoryService.getAll().isEmpty()) {
       try (BufferedReader br = Files.newBufferedReader(Paths.get(carsBackupFilePath))) {
         String line = br.readLine();
         while ((line = br.readLine()) != null) {

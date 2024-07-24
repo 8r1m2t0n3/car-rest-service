@@ -2,9 +2,12 @@ package com.foxminded.car_rest_service.controller;
 
 import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.car.CarDto;
+import jakarta.validation.Valid;
 import java.time.Year;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,79 +31,84 @@ public class CarController {
 
   @GetMapping
   @Operation(summary = "Get all cars")
-  public List<CarDto> getAll() {
-    return carService.getAll();
+  public ResponseEntity<List<CarDto>> getAll() {
+    return ResponseEntity.status(HttpStatus.OK).body(carService.getAll());
   }
 
   @GetMapping("object-id/{objectId}")
   @Operation(summary = "Get car by objectId")
-  public CarDto getCarByObjectId(
+  public ResponseEntity<CarDto> getCarByObjectId(
       @Parameter(description = "Unique object id") @PathVariable String objectId) {
-    return carService.getByObjectId(objectId);
+    return ResponseEntity.status(HttpStatus.OK).body(carService.getByObjectId(objectId));
   }
 
   @GetMapping("/brand/{brand}")
   @Operation(summary = "Get cars by brand")
-  public List<CarDto> getCarsByBrand(
+  public ResponseEntity<List<CarDto>> getCarsByBrand(
       @Parameter(description = "Brand name") @PathVariable String brand) {
-    return carService.getByBrand(brand);
+    return ResponseEntity.status(HttpStatus.OK).body(carService.getByBrand(brand));
   }
 
   @GetMapping("/brand/{brand}/model/{model}")
   @Operation(summary = "Get cars by model")
-  public List<CarDto> getByBrandAndModel(
+  public ResponseEntity<List<CarDto>> getByBrandAndModel(
       @Parameter(description = "Brand name") @PathVariable String brand,
       @Parameter(description = "Model name") @PathVariable String model) {
-    return carService.getByBrandAndModel(brand, model);
+    return ResponseEntity.status(HttpStatus.OK).body(carService.getByBrandAndModel(brand, model));
   }
 
   @GetMapping("/min-year/{minYear}/max-year/{maxYear}")
   @Operation(summary = "Get cars by min and max years of manufacture")
-  public List<CarDto> getByMinYearAndMaxYear(
+  public ResponseEntity<List<CarDto>> getByMinYearAndMaxYear(
       @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
       @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return carService.getByMinYearAndMaxYear(minYear, maxYear);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(carService.getByMinYearAndMaxYear(minYear, maxYear));
   }
 
   @GetMapping("/brand/{brand}/min-year/{minYear}/max-year/{maxYear}")
   @Operation(summary = "Get cars by brand and min and max years of manufacture")
-  public List<CarDto> getByBrandAndMinYearAndMaxYear(
+  public ResponseEntity<List<CarDto>> getByBrandAndMinYearAndMaxYear(
       @Parameter(description = "Brand name") @PathVariable String brand,
       @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
       @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return carService.getByBrandAndMinYearAndMaxYear(brand, minYear, maxYear);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(carService.getByBrandAndMinYearAndMaxYear(brand, minYear, maxYear));
   }
 
   @GetMapping("/brand/{brand}/model/{model}/min-year/{minYear}/max-year/{maxYear}")
   @Operation(summary = "Get cars by brand, model and min and max years of manufacture")
-  public List<CarDto> getByBrandAndModelAndMinYearAndMaxYear(
+  public ResponseEntity<List<CarDto>> getByBrandAndModelAndMinYearAndMaxYear(
       @Parameter(description = "Brand name") @PathVariable String brand,
       @Parameter(description = "Model name") @PathVariable String model,
       @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
       @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return carService.getByBrandAndModelAndMinYearAndMaxYear(brand, model, minYear, maxYear);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(carService.getByBrandAndModelAndMinYearAndMaxYear(brand, model, minYear, maxYear));
   }
 
   @PostMapping
   @Operation(
       summary = "Add car with specified brand, model, year of manufacture and categories",
       security = @SecurityRequirement(name = "bearerAuth"))
-  public CarDto add(@RequestBody CarCreationDto carCreationDto) {
-    return carService.save(carCreationDto);
+  public ResponseEntity<CarDto> add(@Valid @RequestBody CarCreationDto carCreationDto) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(carService.save(carCreationDto));
   }
 
   @DeleteMapping("/{objectId}")
   @Operation(
       summary = "Delete car by objectId",
       security = @SecurityRequirement(name = "bearerAuth"))
-  public void deleteByObjectId(
+  public ResponseEntity<Void> deleteByObjectId(
       @Parameter(description = "Unique object id") @PathVariable String objectId) {
     carService.deleteByObjectId(objectId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete car by id", security = @SecurityRequirement(name = "bearerAuth"))
-  public void deleteById(@Parameter(description = "DB id") @PathVariable Long id) {
+  public ResponseEntity<Void> deleteById(@Parameter(description = "DB id") @PathVariable Long id) {
     carService.deleteById(id);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

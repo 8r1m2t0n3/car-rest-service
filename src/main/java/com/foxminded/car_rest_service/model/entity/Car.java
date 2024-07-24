@@ -16,8 +16,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -25,6 +27,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Car {
 
   @Id
@@ -44,7 +48,7 @@ public class Car {
   @Size(min = 0, max = 32)
   private String brand;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
   @JoinTable(
       name = "car_category",
       joinColumns = @JoinColumn(name = "car_id"),

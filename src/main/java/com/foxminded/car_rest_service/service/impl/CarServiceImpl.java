@@ -2,20 +2,20 @@ package com.foxminded.car_rest_service.service.impl;
 
 import com.foxminded.car_rest_service.exception.car.CarByIdNotFoundException;
 import com.foxminded.car_rest_service.exception.car.CarByObjectIdNotFoundException;
-import com.foxminded.car_rest_service.exception.category.CategoryByNameNotFoundException;
 import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.car.CarDto;
 import com.foxminded.car_rest_service.model.dto.car.CarUpdateDto;
-import com.foxminded.car_rest_service.model.dto.category.CategoryCreationDto;
 import com.foxminded.car_rest_service.model.entity.Car;
 import com.foxminded.car_rest_service.repository.CarRepository;
 import com.foxminded.car_rest_service.service.CarService;
 import com.foxminded.car_rest_service.service.CategoryService;
 import com.foxminded.car_rest_service.util.SequenceGenerator;
 import com.foxminded.car_rest_service.util.mapper.CarMapper;
+import com.foxminded.car_rest_service.util.mapper.CategoryMapper;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CarServiceImpl implements CarService {
 
-  private final CarRepository carRepository;
   private final CategoryService categoryService;
+  private final CarRepository carRepository;
+  private final CategoryMapper categoryMapper;
   private final CarMapper carMapper;
 
   @Value("${object-id.length}")
@@ -42,8 +43,26 @@ public class CarServiceImpl implements CarService {
       car.setObjectId(SequenceGenerator.generate(objectIdLength));
     }
 
+    mergeCarCategories(car);
+
     carRepository.save(car);
     return carMapper.toDto(car);
+  }
+
+  private void mergeCarCategories(Car car) {
+    car.getCategories()
+        .forEach(category ->
+            categoryService.findByName(category.getName())
+                .ifPresentOrElse(existingCategory ->
+                    category.setId(existingCategory.getId()),
+                    () ->
+                        category.setId(
+                            categoryService.save(
+                                categoryMapper.toCreationDto(category)
+                            ).getId()
+                        )
+                )
+        );
   }
 
   @Override
@@ -62,25 +81,29 @@ public class CarServiceImpl implements CarService {
 
   @Override
   public List<CarDto> getByBrand(String brand) {
-    return carRepository.findByBrand(brand).stream().map(carMapper::toDto).toList();
+    return carRepository.findByBrand(brand).stream()
+        .map(carMapper::toDto)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<CarDto> getByBrandAndModel(String brand, String model) {
-    return carRepository.findByBrandAndModel(brand, model).stream().map(carMapper::toDto).toList();
+    return carRepository.findByBrandAndModel(brand, model).stream()
+        .map(carMapper::toDto)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<CarDto> getByMinYearAndMaxYear(Year minYear, Year maxYear) {
     return carRepository.findByMinYearAndMaxYear(minYear, maxYear).stream()
         .map(carMapper::toDto)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<CarDto> getByBrandAndMinYearAndMaxYear(String brand, Year minYear, Year maxYear) {
     List<CarDto> cars = getByBrand(brand);
-    cars.removeIf(o -> (o.getYear().isBefore(minYear) || o.getYear().isAfter(maxYear)));
+    cars.removeIf(car -> (car.getYear().isBefore(minYear) || car.getYear().isAfter(maxYear)));
     return cars;
   }
 
@@ -88,13 +111,13 @@ public class CarServiceImpl implements CarService {
   public List<CarDto> getByBrandAndModelAndMinYearAndMaxYear(
       String brand, String model, Year minYear, Year maxYear) {
     List<CarDto> cars = getByBrandAndModel(brand, model);
-    cars.removeIf(o -> (o.getYear().isBefore(minYear) || o.getYear().isAfter(maxYear)));
+    cars.removeIf(car -> car.getYear().isBefore(minYear) || car.getYear().isAfter(maxYear));
     return cars;
   }
 
   @Override
   public List<CarDto> getAll() {
-    return carRepository.findAll().stream().map(carMapper::toDto).toList();
+    return carRepository.findAll().stream().map(carMapper::toDto).collect(Collectors.toList());
   }
 
   @Transactional

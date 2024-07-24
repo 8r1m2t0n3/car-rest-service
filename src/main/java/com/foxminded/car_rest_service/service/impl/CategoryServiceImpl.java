@@ -10,6 +10,8 @@ import com.foxminded.car_rest_service.repository.CategoryRepository;
 import com.foxminded.car_rest_service.service.CategoryService;
 import com.foxminded.car_rest_service.util.mapper.CategoryMapper;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +46,20 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
+  public Optional<CategoryDto> findByName(String name) {
+    Optional<Category> category = categoryRepository.findByName(name);
+    Optional<CategoryDto> categoryDto = Optional.empty();
+    if (category.isPresent()) {
+      categoryDto = Optional.ofNullable(categoryMapper.toDto(category.get()));
+    }
+    return categoryDto;
+  }
+
+  @Override
   public List<CategoryDto> getAll() {
-    return categoryRepository.findAll().stream().map(categoryMapper::toDto).toList();
+    return categoryRepository.findAll().stream()
+        .map(categoryMapper::toDto)
+        .collect(Collectors.toList());
   }
 
   @Transactional

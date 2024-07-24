@@ -5,6 +5,7 @@ import com.foxminded.car_rest_service.model.dto.category.CategoryCreationDto;
 import com.foxminded.car_rest_service.model.dto.category.CategoryDto;
 import com.foxminded.car_rest_service.model.dto.category.CategoryUpdateDto;
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
 
@@ -13,6 +14,8 @@ public interface CategoryService {
    CategoryDto getById(Long id);
 
    CategoryDto getByName(String name);
+
+   Optional<CategoryDto> findByName(String name);
 
    List<CategoryDto> getAll();
 

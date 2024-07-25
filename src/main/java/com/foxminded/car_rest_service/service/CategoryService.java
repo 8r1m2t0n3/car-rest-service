@@ -9,17 +9,17 @@ import java.util.Optional;
 
 public interface CategoryService {
 
-   CategoryDto save(CategoryCreationDto categoryCreationDto);
+  CategoryDto save(CategoryCreationDto categoryCreationDto);
 
-   CategoryDto getById(Long id);
+  CategoryDto getById(Long id);
 
-   CategoryDto getByName(String name);
+  CategoryDto getByName(String name);
 
-   Optional<CategoryDto> findByName(String name);
+  Optional<CategoryDto> findByName(String name);
 
-   List<CategoryDto> getAll();
+  List<CategoryDto> getAll();
 
   CategoryDto update(Long id, CategoryUpdateDto categoryUpdateDto);
 
-   void deleteById(Long id);
+  void deleteById(Long id);
 }

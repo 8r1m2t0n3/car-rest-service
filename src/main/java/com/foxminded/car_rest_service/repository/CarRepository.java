@@ -1,12 +1,12 @@
 package com.foxminded.car_rest_service.repository;
 
+import com.foxminded.car_rest_service.model.entity.Car;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import com.foxminded.car_rest_service.model.entity.Car;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {

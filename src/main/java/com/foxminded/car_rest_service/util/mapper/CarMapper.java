@@ -9,10 +9,16 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapperConfig.class)
 public interface CarMapper {
+
    Car toEntity(CarDto carDto);
-   Car toEntity(CarCreationDto carCreationDto);
-   Car toEntity(CarUpdateDto carUpdateDto);
-   CarDto toDto(Car car);
-   CarDto toDto(CarCreationDto carCreationDto);
-   CarDto toDto(CarUpdateDto carUpdateDto);
+
+  Car toEntity(CarCreationDto carCreationDto);
+
+  Car toEntity(CarUpdateDto carUpdateDto);
+
+  CarDto toDto(Car car);
+
+  CarDto toDto(CarCreationDto carCreationDto);
+
+  CarDto toDto(CarUpdateDto carUpdateDto);
 }

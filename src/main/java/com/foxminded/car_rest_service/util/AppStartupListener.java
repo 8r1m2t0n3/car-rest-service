@@ -2,6 +2,8 @@ package com.foxminded.car_rest_service.util;
 
 import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.category.CategoryCreationDto;
+import com.foxminded.car_rest_service.service.CarService;
+import com.foxminded.car_rest_service.service.CategoryService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import com.foxminded.car_rest_service.service.CarService;
-import com.foxminded.car_rest_service.service.CategoryService;
 
 @Component
 @RequiredArgsConstructor

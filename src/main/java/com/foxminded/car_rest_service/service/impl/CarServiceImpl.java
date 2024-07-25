@@ -51,18 +51,17 @@ public class CarServiceImpl implements CarService {
 
   private void mergeCarCategories(Car car) {
     car.getCategories()
-        .forEach(category ->
-            categoryService.findByName(category.getName())
-                .ifPresentOrElse(existingCategory ->
-                    category.setId(existingCategory.getId()),
-                    () ->
-                        category.setId(
-                            categoryService.save(
-                                categoryMapper.toCreationDto(category)
-                            ).getId()
-                        )
-                )
-        );
+        .forEach(
+            category ->
+                categoryService
+                    .findByName(category.getName())
+                    .ifPresentOrElse(
+                        existingCategory -> category.setId(existingCategory.getId()),
+                        () ->
+                            category.setId(
+                                categoryService
+                                    .save(categoryMapper.toCreationDto(category))
+                                    .getId())));
   }
 
   @Override

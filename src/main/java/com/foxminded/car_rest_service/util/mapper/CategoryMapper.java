@@ -9,11 +9,18 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
+
   Category toEntity(CategoryDto categoryDto);
+
   Category toEntity(CategoryCreationDto categoryCreationDto);
+
   Category toEntity(CategoryUpdateDto categoryUpdateDto);
+
   CategoryDto toDto(Category category);
+
   CategoryDto toDto(CategoryCreationDto categoryCreationDto);
+
   CategoryDto toDto(CategoryUpdateDto categoryUpdateDto);
+
   CategoryCreationDto toCreationDto(Category category);
 }

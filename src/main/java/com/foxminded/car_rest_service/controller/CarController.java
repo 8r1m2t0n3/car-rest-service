@@ -95,7 +95,7 @@ public class CarController {
     return ResponseEntity.status(HttpStatus.CREATED).body(carService.save(carCreationDto));
   }
 
-  @DeleteMapping("/{objectId}")
+  @DeleteMapping("/object-id/{objectId}")
   @Operation(
       summary = "Delete car by objectId",
       security = @SecurityRequirement(name = "bearerAuth"))
@@ -105,7 +105,7 @@ public class CarController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/id/{id}")
   @Operation(summary = "Delete car by id", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> deleteById(@Parameter(description = "DB id") @PathVariable Long id) {
     carService.deleteById(id);

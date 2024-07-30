@@ -2,13 +2,13 @@ package com.foxminded.car_rest_service.controller;
 
 import com.foxminded.car_rest_service.model.dto.car.CarCreationDto;
 import com.foxminded.car_rest_service.model.dto.car.CarDto;
+import com.foxminded.car_rest_service.model.dto.car.CarSortingOptionsDto;
 import com.foxminded.car_rest_service.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.time.Year;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cars")
+@RequestMapping("/api/v1/cars")
 @Tag(name = "Cars", description = "RESTful API for managing cars")
 @RequiredArgsConstructor
 public class CarController {
@@ -31,8 +31,16 @@ public class CarController {
 
   @GetMapping
   @Operation(summary = "Get all cars")
-  public ResponseEntity<List<CarDto>> getAll() {
+  public ResponseEntity<List<CarDto>> getAllCars() {
     return ResponseEntity.status(HttpStatus.OK).body(carService.getAll());
+  }
+
+  @GetMapping("/sorted")
+  @Operation(summary = "Get cars that satisfy the sorting requirements")
+  public ResponseEntity<List<CarDto>> getSortedCars(
+      @Valid @RequestBody CarSortingOptionsDto carSortingOptionsDto) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(carService.getBySortOptions(carSortingOptionsDto));
   }
 
   @GetMapping("object-id/{objectId}")
@@ -40,51 +48,6 @@ public class CarController {
   public ResponseEntity<CarDto> getCarByObjectId(
       @Parameter(description = "Unique object id") @PathVariable String objectId) {
     return ResponseEntity.status(HttpStatus.OK).body(carService.getByObjectId(objectId));
-  }
-
-  @GetMapping("/brand/{brand}")
-  @Operation(summary = "Get cars by brand")
-  public ResponseEntity<List<CarDto>> getCarsByBrand(
-      @Parameter(description = "Brand name") @PathVariable String brand) {
-    return ResponseEntity.status(HttpStatus.OK).body(carService.getByBrand(brand));
-  }
-
-  @GetMapping("/brand/{brand}/model/{model}")
-  @Operation(summary = "Get cars by model")
-  public ResponseEntity<List<CarDto>> getByBrandAndModel(
-      @Parameter(description = "Brand name") @PathVariable String brand,
-      @Parameter(description = "Model name") @PathVariable String model) {
-    return ResponseEntity.status(HttpStatus.OK).body(carService.getByBrandAndModel(brand, model));
-  }
-
-  @GetMapping("/min-year/{minYear}/max-year/{maxYear}")
-  @Operation(summary = "Get cars by min and max years of manufacture")
-  public ResponseEntity<List<CarDto>> getByMinYearAndMaxYear(
-      @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
-      @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(carService.getByMinYearAndMaxYear(minYear, maxYear));
-  }
-
-  @GetMapping("/brand/{brand}/min-year/{minYear}/max-year/{maxYear}")
-  @Operation(summary = "Get cars by brand and min and max years of manufacture")
-  public ResponseEntity<List<CarDto>> getByBrandAndMinYearAndMaxYear(
-      @Parameter(description = "Brand name") @PathVariable String brand,
-      @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
-      @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(carService.getByBrandAndMinYearAndMaxYear(brand, minYear, maxYear));
-  }
-
-  @GetMapping("/brand/{brand}/model/{model}/min-year/{minYear}/max-year/{maxYear}")
-  @Operation(summary = "Get cars by brand, model and min and max years of manufacture")
-  public ResponseEntity<List<CarDto>> getByBrandAndModelAndMinYearAndMaxYear(
-      @Parameter(description = "Brand name") @PathVariable String brand,
-      @Parameter(description = "Model name") @PathVariable String model,
-      @Parameter(description = "Min year of manufacture") @PathVariable Year minYear,
-      @Parameter(description = "Max year of manufacture") @PathVariable Year maxYear) {
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(carService.getByBrandAndModelAndMinYearAndMaxYear(brand, model, minYear, maxYear));
   }
 
   @PostMapping

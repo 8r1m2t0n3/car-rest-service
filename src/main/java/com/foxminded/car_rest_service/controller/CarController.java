@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/cars")
+@RequestMapping("/api/v1/car")
 @Tag(name = "Cars", description = "RESTful API for managing cars")
 @RequiredArgsConstructor
 public class CarController {

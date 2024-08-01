@@ -36,9 +36,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET)
                 .permitAll()
                 .requestMatchers(HttpMethod.POST)
-                .permitAll()
+                .authenticated()
                 .requestMatchers(HttpMethod.DELETE)
-                .permitAll());
+                .authenticated());
     http.oauth2ResourceServer(
         oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
     http.csrf(AbstractHttpConfigurer::disable);

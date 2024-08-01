@@ -15,7 +15,9 @@ import com.brimstone.car.rest.service.util.mapper.CarMapper;
 import com.brimstone.car.rest.service.util.mapper.CategoryMapper;
 import com.brimstone.car.rest.service.util.specification.CarSpecification;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,16 +53,28 @@ public class CarServiceImpl implements CarService {
   }
 
   private void mergeCarCategories(Car car) {
-    car.getCategories().forEach(category -> {
-      Optional<CategoryDto> existingCategory = categoryService.findByName(category.getName());
+    List<CategoryDto> allExistingCategories = categoryService.getAll();
 
-      if (existingCategory.isPresent()) {
-        category.setId(existingCategory.get().getId());
-      } else {
-        CategoryDto savedCategory = categoryService.save(categoryMapper.toCreationDto(category));
-        category.setId(savedCategory.getId());
-      }
-    });
+    Map<String, CategoryDto> categoryMap =
+        allExistingCategories.stream()
+            .collect(Collectors.toMap(CategoryDto::getName, Function.identity()));
+
+    car.getCategories()
+        .forEach(
+            category -> {
+              // todo: fix the bug with binding multiple categories with the same name to a car
+              CategoryDto matchedCategory = categoryMap.get(category.getName());
+
+              if (matchedCategory != null) {
+                category.setId(matchedCategory.getId());
+              } else {
+                CategoryDto savedCategory =
+                    categoryService.save(categoryMapper.toCreationDto(category));
+                category.setId(savedCategory.getId());
+
+                categoryMap.put(category.getName(), savedCategory);
+              }
+            });
   }
 
   @Override

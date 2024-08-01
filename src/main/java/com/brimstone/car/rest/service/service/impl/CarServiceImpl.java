@@ -5,6 +5,7 @@ import com.brimstone.car.rest.service.model.dto.car.CarCreationDto;
 import com.brimstone.car.rest.service.model.dto.car.CarDto;
 import com.brimstone.car.rest.service.model.dto.car.CarSortingOptionsDto;
 import com.brimstone.car.rest.service.model.dto.car.CarUpdateDto;
+import com.brimstone.car.rest.service.model.dto.category.CategoryDto;
 import com.brimstone.car.rest.service.model.entity.Car;
 import com.brimstone.car.rest.service.repository.CarRepository;
 import com.brimstone.car.rest.service.service.CarService;
@@ -50,18 +51,16 @@ public class CarServiceImpl implements CarService {
   }
 
   private void mergeCarCategories(Car car) {
-    car.getCategories()
-        .forEach(
-            category ->
-                categoryService
-                    .findByName(category.getName())
-                    .ifPresentOrElse(
-                        existingCategory -> category.setId(existingCategory.getId()),
-                        () ->
-                            category.setId(
-                                categoryService
-                                    .save(categoryMapper.toCreationDto(category))
-                                    .getId())));
+    car.getCategories().forEach(category -> {
+      Optional<CategoryDto> existingCategory = categoryService.findByName(category.getName());
+
+      if (existingCategory.isPresent()) {
+        category.setId(existingCategory.get().getId());
+      } else {
+        CategoryDto savedCategory = categoryService.save(categoryMapper.toCreationDto(category));
+        category.setId(savedCategory.getId());
+      }
+    });
   }
 
   @Override

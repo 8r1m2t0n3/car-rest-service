@@ -1,0 +1,23 @@
+spring:
+  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/car-db
+    username: postgres
+    password: postgres_password
+  security.oauth2.resourceserver.jwt:
+    issuer-uri: http://keycloak:9080/realms/car_app_realm
+    jwk-set-uri: http://keycloak:9080/realms/car_app_realm/protocol/openid-connect/certs
+    client-id: car-rest-client
+
+keycloak:
+  auth-server-url: http://keycloak:9080
+
+springdoc:
+  api-docs.path: /docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+object-id.length: 10
+path.static.file.cars: "target/classes/static/cars.csv"

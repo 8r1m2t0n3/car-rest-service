@@ -1,6 +1,6 @@
 [ {
   "id" : "487fa218-7f0a-4467-8556-cf1c742d0257",
-  "realm" : "car_app_realm",
+  "realm" : "car-rest-service-realm",
   "notBefore" : 0,
   "defaultSignatureAlgorithm" : "RS256",
   "revokeRefreshToken" : false,
@@ -54,7 +54,7 @@
       "attributes" : { }
     }, {
       "id" : "699f6864-bb0b-4b78-93e4-5c850552c9a3",
-      "name" : "default-roles-car_app_realm",
+      "name" : "default-roles-car-rest-service-realm",
       "description" : "${role_default-roles}",
       "composite" : true,
       "composites" : {
@@ -385,7 +385,7 @@
   "groups" : [ ],
   "defaultRole" : {
     "id" : "699f6864-bb0b-4b78-93e4-5c850552c9a3",
-    "name" : "default-roles-car_app_realm",
+    "name" : "default-roles-car-rest-service-realm",
     "description" : "${role_default-roles}",
     "composite" : true,
     "clientRole" : false,
@@ -440,7 +440,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-car_app_realm", "app_admin" ],
+    "realmRoles" : [ "default-roles-car-rest-service-realm", "app_admin" ],
     "clientRoles" : {
       "car-rest-client" : [ "admin" ]
     },
@@ -466,7 +466,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-car_app_realm", "app_user" ],
+    "realmRoles" : [ "default-roles-car-rest-service-realm", "app_user" ],
     "clientRoles" : {
       "car-rest-client" : [ "user" ]
     },
@@ -488,12 +488,12 @@
     "clientId" : "account",
     "name" : "${client_account}",
     "rootUrl" : "${authBaseUrl}",
-    "baseUrl" : "/realms/car_app_realm/account/",
+    "baseUrl" : "/realms/car-rest-service-realm/account/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/realms/car_app_realm/account/*" ],
+    "redirectUris" : [ "/realms/car-rest-service-realm/account/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -518,12 +518,12 @@
     "clientId" : "account-console",
     "name" : "${client_account-console}",
     "rootUrl" : "${authBaseUrl}",
-    "baseUrl" : "/realms/car_app_realm/account/",
+    "baseUrl" : "/realms/car-rest-service-realm/account/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/realms/car_app_realm/account/*" ],
+    "redirectUris" : [ "/realms/car-rest-service-realm/account/*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -687,12 +687,12 @@
     "clientId" : "security-admin-console",
     "name" : "${client_security-admin-console}",
     "rootUrl" : "${authAdminUrl}",
-    "baseUrl" : "/admin/car_app_realm/console/",
+    "baseUrl" : "/admin/car-rest-service-realm/console/",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "/admin/car_app_realm/console/*" ],
+    "redirectUris" : [ "/admin/car-rest-service-realm/console/*" ],
     "webOrigins" : [ "+" ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -1977,7 +1977,7 @@
       "composites" : {
         "realm" : [ "create-realm" ],
         "client" : {
-          "car_app_realm-realm" : [ "manage-users", "impersonation", "create-client", "view-authorization", "query-users", "manage-authorization", "view-clients", "view-users", "view-realm", "query-realms", "manage-realm", "manage-events", "manage-identity-providers", "view-identity-providers", "manage-clients", "view-events", "query-groups", "query-clients" ],
+          "car-rest-service-realm-realm" : [ "manage-users", "impersonation", "create-client", "view-authorization", "query-users", "manage-authorization", "view-clients", "view-users", "view-realm", "query-realms", "manage-realm", "manage-events", "manage-identity-providers", "view-identity-providers", "manage-clients", "view-events", "query-groups", "query-clients" ],
           "master-realm" : [ "impersonation", "query-groups", "query-clients", "manage-authorization", "manage-realm", "manage-users", "view-events", "query-realms", "manage-identity-providers", "create-client", "view-realm", "view-clients", "manage-clients", "view-authorization", "view-identity-providers", "manage-events", "view-users", "query-users" ]
         }
       },
@@ -1987,7 +1987,7 @@
     } ],
     "client" : {
       "security-admin-console" : [ ],
-      "car_app_realm-realm" : [ {
+      "car-rest-service-realm-realm" : [ {
         "id" : "2e42ede8-5290-4187-80a8-bc0ff9ea814c",
         "name" : "manage-users",
         "description" : "${role_manage-users}",
@@ -2066,7 +2066,7 @@
         "composite" : true,
         "composites" : {
           "client" : {
-            "car_app_realm-realm" : [ "query-clients" ]
+            "car-rest-service-realm-realm" : [ "query-clients" ]
           }
         },
         "clientRole" : true,
@@ -2087,7 +2087,7 @@
         "composite" : true,
         "composites" : {
           "client" : {
-            "car_app_realm-realm" : [ "query-groups", "query-users" ]
+            "car-rest-service-realm-realm" : [ "query-groups", "query-users" ]
           }
         },
         "clientRole" : true,
@@ -2441,7 +2441,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "admin", "default-roles-master" ],
     "clientRoles" : {
-      "car_app_realm-realm" : [ "manage-users", "manage-realm", "manage-events", "create-client", "view-authorization", "query-users", "manage-identity-providers", "manage-authorization", "view-clients", "view-identity-providers", "view-users", "manage-clients", "view-events", "view-realm", "query-groups", "query-realms", "query-clients" ]
+      "car-rest-service-realm-realm" : [ "manage-users", "manage-realm", "manage-events", "create-client", "view-authorization", "query-users", "manage-identity-providers", "manage-authorization", "view-clients", "view-identity-providers", "view-users", "manage-clients", "view-events", "view-realm", "query-groups", "query-realms", "query-clients" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
@@ -2579,8 +2579,8 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "e5a4c676-29c0-4709-8cb0-b86595061cc2",
-    "clientId" : "car_app_realm-realm",
-    "name" : "car_app_realm Realm",
+    "clientId" : "car-rest-service-realm-realm",
+    "name" : "car-rest-service-realm Realm",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,

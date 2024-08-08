@@ -1,24 +1,26 @@
 package com.brimstone.car.rest.service.config;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import com.brimstone.car.rest.service.security.JwtAuthConverter;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import com.brimstone.car.rest.service.security.JwtAuthenticationEntryPoint;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@OpenAPIDefinition(info = @Info(title = "Car rest api service", version = "v1"))
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
@@ -27,23 +29,31 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+  private static final String[] WHITELIST = {"/api/v1/keycloak/**", "/swagger-ui/**"};
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(
-        authorize ->
-            authorize
-                .requestMatchers(HttpMethod.GET)
-                .permitAll()
-                .requestMatchers(HttpMethod.POST)
-                .authenticated()
-                .requestMatchers(HttpMethod.DELETE)
-                .authenticated());
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+            request ->
+                request
+                    .requestMatchers(WHITELIST)
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET)
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .cors(Customizer.withDefaults())
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
     http.oauth2ResourceServer(
-        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
-    http.csrf(AbstractHttpConfigurer::disable);
-    http.sessionManagement(
-        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        server ->
+            server
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint));
+    http.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
+
     return http.build();
   }
 }

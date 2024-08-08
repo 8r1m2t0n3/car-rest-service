@@ -1,17 +1,32 @@
+env:
+  host: localhost
+  database:
+    name: car-db
+    password: ${CAR_REST_SERVICE_DB_USER_PASSWORD}
+    postgres:
+      port: 5434
+
 spring:
   jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5434/car-db
+    url: jdbc:postgresql://${env.host}:${env.database.postgres.port}/${env.database.name}
     username: postgres
-    password: postgres_password
-  security.oauth2.resourceserver.jwt:
-    issuer-uri: http://keycloak:9080/realms/car_app_realm
-    jwk-set-uri: http://keycloak:9080/realms/car_app_realm/protocol/openid-connect/certs
-    client-id: car-rest-client
+    password: ${env.database.password}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 keycloak:
-  auth-server-url: http://keycloak:9080
+  url: http://${env.host}:9080
+  realm: car-rest-service-realm
+  clientId: car-rest-client
+  clientSecret: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
 
 springdoc:
   api-docs.path: /docs

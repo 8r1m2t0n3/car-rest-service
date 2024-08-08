@@ -18,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@OpenAPIDefinition(info = @Info(title = "Car rest api service", version = "v1"))
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
@@ -28,16 +27,18 @@ public class SecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
 
+  private static final String[] WHITELIST = {"/api/v1/keycloak/**", "/swagger-ui/**"};
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
         authorize ->
             authorize
+                .requestMatchers(WHITELIST)
+                .permitAll()
                 .requestMatchers(HttpMethod.GET)
                 .permitAll()
-                .requestMatchers(HttpMethod.POST)
-                .authenticated()
-                .requestMatchers(HttpMethod.DELETE)
+                .anyRequest()
                 .authenticated());
     http.oauth2ResourceServer(
         oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));

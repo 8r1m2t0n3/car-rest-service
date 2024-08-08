@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/keycloak")
-@Tag(name = "Keycloak", description = "RESTful API for connection with Keycloak")
+@Tag(
+    name = "Keycloak",
+    description =
+        "The RESTful API implemented for connecting with Keycloak from the service side only. "
+            + "Must not be used beyond the service.")
 @AllArgsConstructor
 public class KeycloakController {
 

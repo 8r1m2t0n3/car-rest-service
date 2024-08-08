@@ -1,13 +1,16 @@
 package com.brimstone.car.rest.service.security;
 
+import com.brimstone.car.rest.service.config.KeycloakClientConfig;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,20 +20,22 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+
+  private final KeycloakClientConfig keycloakClientConfig;
 
   private static final String JWT_CLAIM_WITH_CLIENTS = "resource_access";
   private static final String JWT_CLAIM_WITH_ROLES = "roles";
-  private static final JwtGrantedAuthoritiesConverter JWT_CONVERTER =
+  private static final JwtGrantedAuthoritiesConverter JWT_GRANTED_AUTHORITIES_CONVERTER =
       new JwtGrantedAuthoritiesConverter();
 
-  @Value(("${spring.security.oauth2.resourceserver.jwt.client-id}"))
-  private String keycloakClient;
-
   @Override
-  public AbstractAuthenticationToken convert(Jwt jwt) {
-    Collection<GrantedAuthority> authorities =
-        Stream.concat(JWT_CONVERTER.convert(jwt).stream(), extractResourceRoles(jwt).stream())
+  public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
+    final Collection<GrantedAuthority> authorities =
+        Stream.concat(
+                JWT_GRANTED_AUTHORITIES_CONVERTER.convert(jwt).stream(),
+                extractResourceRoles(jwt).stream())
             .collect(Collectors.toSet());
     return new JwtAuthenticationToken(jwt, authorities);
   }
@@ -52,6 +57,6 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
   }
 
   private Map<String, List<String>> getClientRoles(Map<String, List<String>> resourceRoles) {
-    return (Map<String, List<String>>) resourceRoles.get(keycloakClient);
+    return (Map<String, List<String>>) resourceRoles.get(keycloakClientConfig.getClientId());
   }
 }

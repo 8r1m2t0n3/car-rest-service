@@ -15,11 +15,18 @@ spring:
     username: postgres
     password: ${env.database.password}
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
 keycloak:
   url: http://${env.host}:9080
   realm: car-rest-service-realm
   clientId: car-rest-client
-  client-secret: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
+  clientSecret: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
 
 springdoc:
   api-docs.path: /docs

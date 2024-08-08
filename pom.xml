@@ -16,6 +16,7 @@
 	<properties>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<lombok.version>1.18.26</lombok.version>
+		<keycloak.version>20.0.0</keycloak.version>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -51,24 +52,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-spring-boot-starter</artifactId>
-			<version>22.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-spring-security-adapter</artifactId>
-			<version>22.0.0</version>
+			<artifactId>keycloak-core</artifactId>
+			<version>${keycloak.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
-			<version>22.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.keycloak.bom</groupId>
-			<artifactId>keycloak-adapter-bom</artifactId>
-			<version>22.0.0</version>
-			<type>pom</type>
+			<version>${keycloak.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>

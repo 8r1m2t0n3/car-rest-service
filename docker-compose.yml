@@ -8,24 +8,27 @@ services:
       - keycloak
       - database-postgres
     environment:
-      - spring.datasource.url=jdbc:postgresql://db:5432/car-db
+      CAR_REST_SERVICE_DB_USER_PASSWORD: ${CAR_REST_SERVICE_DB_USER_PASSWORD}
+      CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
+      spring.datasource.url: jdbc:postgresql://db:5432/car-db
     build: ./
     ports:
-      - 8080:8080
+      - "8080:8080"
     networks:
       - keycloak-net
 
   keycloak:
     container_name: car-rest-service-keycloak
     hostname: keycloak
-    image: quay.io/keycloak/keycloak:22.0
+    image: quay.io/keycloak/keycloak:24.0.5
     ports:
-      - 9080:9080
+      - "9080:9080"
     networks:
       - keycloak-net
     volumes:
       - ./keycloak/config:/opt/keycloak/data/import
     environment:
+      CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 9080

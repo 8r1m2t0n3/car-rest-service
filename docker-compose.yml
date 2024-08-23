@@ -8,6 +8,7 @@ services:
       - keycloak
       - database-postgres
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       CAR_REST_SERVICE_DB_USER_PASSWORD: ${CAR_REST_SERVICE_DB_USER_PASSWORD}
       CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
       spring.datasource.url: jdbc:postgresql://db:5432/car-db

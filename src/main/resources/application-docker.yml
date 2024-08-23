@@ -1,0 +1,38 @@
+env:
+  host: keycloak
+  database:
+    name: car-db
+    password: ${CAR_REST_SERVICE_DB_USER_PASSWORD}
+    postgres:
+      port: 5434
+
+spring:
+  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${env.host}:${env.database.postgres.port}/${env.database.name}
+    username: postgres
+    password: ${env.database.password}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/realms/${keycloak.realm}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+keycloak:
+  url: http://${env.host}:9080
+  realm: car-rest-service-realm
+  clientId: car-rest-client
+  clientSecret: ${CAR_REST_SERVICE_KEYCLOAK_CLIENT_SECRET}
+
+springdoc:
+  api-docs.path: /docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+object-id.length: 10
+path.static.file.cars: "target/classes/static/cars.csv"

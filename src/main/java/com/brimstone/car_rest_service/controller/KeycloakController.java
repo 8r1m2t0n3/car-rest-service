@@ -2,7 +2,7 @@ package com.brimstone.car_rest_service.controller;
 
 import com.brimstone.car_rest_service.model.dto.user.KeycloakUserCredentialsDto;
 import com.brimstone.car_rest_service.service.KeycloakService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.brimstone.car_rest_service.util.swagger.KeycloakOpenApi;
 import lombok.AllArgsConstructor;
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.HttpStatus;
@@ -14,13 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/keycloak")
-@Tag(
-    name = "Keycloak",
-    description =
-        "The RESTful API implemented for connecting with Keycloak from the service side only. "
-            + "Must not be used beyond the service.")
 @AllArgsConstructor
-public class KeycloakController {
+public class KeycloakController implements KeycloakOpenApi {
 
   private final KeycloakService keycloakService;
 

@@ -4,10 +4,7 @@ import com.brimstone.car_rest_service.model.dto.car.CarCreationDto;
 import com.brimstone.car_rest_service.model.dto.car.CarDto;
 import com.brimstone.car_rest_service.model.dto.car.CarSortingOptionsDto;
 import com.brimstone.car_rest_service.service.CarService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.brimstone.car_rest_service.util.swagger.CarOpenApi;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,20 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/car")
-@Tag(name = "Cars", description = "RESTful API for managing cars")
 @AllArgsConstructor
-public class CarController {
+public class CarController implements CarOpenApi {
 
   private final CarService carService;
 
   @GetMapping
-  @Operation(summary = "Get all cars")
   public ResponseEntity<List<CarDto>> getAllCars() {
     return ResponseEntity.status(HttpStatus.OK).body(carService.getAll());
   }
 
   @GetMapping("/sorted")
-  @Operation(summary = "Get cars that satisfy the sorting requirements")
   public ResponseEntity<List<CarDto>> getSortedCars(
       @Valid @RequestBody CarSortingOptionsDto carSortingOptionsDto) {
     return ResponseEntity.status(HttpStatus.OK)
@@ -44,33 +38,23 @@ public class CarController {
   }
 
   @GetMapping("object-id/{objectId}")
-  @Operation(summary = "Get car by objectId")
-  public ResponseEntity<CarDto> getCarByObjectId(
-      @Parameter(description = "Unique object id") @PathVariable String objectId) {
+  public ResponseEntity<CarDto> getCarByObjectId(@PathVariable String objectId) {
     return ResponseEntity.status(HttpStatus.OK).body(carService.getByObjectId(objectId));
   }
 
   @PostMapping
-  @Operation(
-      summary = "Add car with specified brand, model, year of manufacture and categories",
-      security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<CarDto> add(@Valid @RequestBody CarCreationDto carCreationDto) {
     return ResponseEntity.status(HttpStatus.CREATED).body(carService.save(carCreationDto));
   }
 
   @DeleteMapping("/object-id/{objectId}")
-  @Operation(
-      summary = "Delete car by objectId",
-      security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<Void> deleteByObjectId(
-      @Parameter(description = "Unique object id") @PathVariable String objectId) {
+  public ResponseEntity<Void> deleteByObjectId(@PathVariable String objectId) {
     carService.deleteByObjectId(objectId);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @DeleteMapping("/id/{id}")
-  @Operation(summary = "Delete car by id", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<Void> deleteById(@Parameter(description = "DB id") @PathVariable Long id) {
+  public ResponseEntity<Void> deleteById(@PathVariable Long id) {
     carService.deleteById(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }

@@ -10,9 +10,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.brimstone</groupId>
-  <artifactId>car.rest.service</artifactId>
+  <artifactId>car_rest_service</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>car_rest_service</name>
+  <name>car-rest-service</name>
   <description>Car rest service</description>
   <properties>
     <lombok.version>1.18.26</lombok.version>

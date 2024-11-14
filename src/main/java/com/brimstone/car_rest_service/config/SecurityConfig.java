@@ -30,7 +30,7 @@ public class SecurityConfig {
   private final JwtAuthConverter jwtAuthConverter;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-  private static final String[] WHITELIST = {"/api/v1/keycloak/**", "/swagger-ui/**"};
+  private static final String[] WHITELIST = {"/api/v1/keycloak/**", "/swagger-ui/**", "/api/v1/car/sorted"};
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

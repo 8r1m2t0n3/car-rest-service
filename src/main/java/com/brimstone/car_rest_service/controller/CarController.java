@@ -32,7 +32,7 @@ public class CarController implements CarOpenApi {
     return ResponseEntity.status(HttpStatus.OK).body(carService.getAll());
   }
 
-  @GetMapping("/sorted")
+  @PostMapping("/sorted")
   public ResponseEntity<List<CarDto>> getSortedCars(
       @Valid @RequestBody CarSortingOptionsDto carSortingOptionsDto) {
     return ResponseEntity.status(HttpStatus.OK)

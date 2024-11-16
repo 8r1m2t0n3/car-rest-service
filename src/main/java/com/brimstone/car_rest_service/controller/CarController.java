@@ -3,6 +3,7 @@ package com.brimstone.car_rest_service.controller;
 import com.brimstone.car_rest_service.model.dto.car.CarCreationDto;
 import com.brimstone.car_rest_service.model.dto.car.CarDto;
 import com.brimstone.car_rest_service.model.dto.car.CarSortingOptionsDto;
+import com.brimstone.car_rest_service.model.enums.DriveType;
 import com.brimstone.car_rest_service.service.CarService;
 import com.brimstone.car_rest_service.util.swagger.CarOpenApi;
 import jakarta.validation.Valid;

@@ -10,6 +10,6 @@ public class KeycloakUserProvideInvalidCredentialsException extends CustomRuntim
   private static final HttpStatus STATUS = HttpStatus.UNAUTHORIZED;
 
   public KeycloakUserProvideInvalidCredentialsException() {
-    super(ERROR_MESSAGE.formatted(), STATUS);
+    super(ERROR_MESSAGE, STATUS);
   }
 }

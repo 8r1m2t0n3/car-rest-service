@@ -4,11 +4,14 @@ import com.brimstone.car_rest_service.model.enums.DriveType;
 import com.brimstone.car_rest_service.model.enums.EngineType;
 import com.brimstone.car_rest_service.model.enums.SteeringLocation;
 import com.brimstone.car_rest_service.model.enums.TransmissionType;
+import com.brimstone.car_rest_service.util.enum_converter.DriveTypeConverter;
+import com.brimstone.car_rest_service.util.enum_converter.EngineTypeConverter;
+import com.brimstone.car_rest_service.util.enum_converter.SteeringLocationConverter;
+import com.brimstone.car_rest_service.util.enum_converter.TransmissionTypeConverter;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -56,16 +59,16 @@ public class Car {
   @Column(name = "price_in_usd")
   private BigDecimal price;
 
-  @Enumerated(EnumType.STRING)
+  @Convert(converter = TransmissionTypeConverter.class)
   private TransmissionType transmissionType;
 
-  @Enumerated(EnumType.STRING)
+  @Convert(converter = EngineTypeConverter.class)
   private EngineType engineType;
 
-  @Enumerated(EnumType.STRING)
+  @Convert(converter = DriveTypeConverter.class)
   private DriveType driveType;
 
-  @Enumerated(EnumType.STRING)
+  @Convert(converter = SteeringLocationConverter.class)
   private SteeringLocation steeringLocation;
 
   @Column(name = "mileage_in_km")

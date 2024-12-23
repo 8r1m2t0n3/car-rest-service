@@ -1,4 +1,4 @@
-package com.brimstone.car_rest_service.security;
+package com.brimstone.car_rest_service.util.security;
 
 import com.brimstone.car_rest_service.config.KeycloakClientConfig;
 import java.util.Collection;
@@ -55,6 +55,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
   }
 
+  @SuppressWarnings("unchecked")
   private Map<String, List<String>> getClientRoles(Map<String, List<String>> resourceRoles) {
     return (Map<String, List<String>>) resourceRoles.get(keycloakClientConfig.getClientId());
   }

@@ -1,6 +1,5 @@
 package com.brimstone.car_rest_service.util.enum_converter;
 
-import com.brimstone.car_rest_service.model.enums.DriveType;
 import com.brimstone.car_rest_service.model.enums.EngineType;
 import jakarta.persistence.AttributeConverter;
 

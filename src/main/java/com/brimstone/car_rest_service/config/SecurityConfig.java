@@ -2,8 +2,8 @@ package com.brimstone.car_rest_service.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import com.brimstone.car_rest_service.security.JwtAuthConverter;
-import com.brimstone.car_rest_service.security.JwtAuthenticationEntryPoint;
+import com.brimstone.car_rest_service.util.security.JwtAuthConverter;
+import com.brimstone.car_rest_service.util.security.JwtAuthenticationEntryPoint;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,9 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .cors(Customizer.withDefaults())
-        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        .headers(headers ->
+            headers
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
     http.oauth2ResourceServer(
         server ->
             server

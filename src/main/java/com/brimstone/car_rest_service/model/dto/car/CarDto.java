@@ -1,8 +1,15 @@
 package com.brimstone.car_rest_service.model.dto.car;
 
+import com.brimstone.car_rest_service.model.dto.brand.BrandDto;
 import com.brimstone.car_rest_service.model.entity.Category;
+import com.brimstone.car_rest_service.model.enums.DriveType;
+import com.brimstone.car_rest_service.model.enums.EngineType;
+import com.brimstone.car_rest_service.model.enums.SteeringLocation;
+import com.brimstone.car_rest_service.model.enums.TransmissionType;
+import java.math.BigDecimal;
 import java.time.Year;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +20,18 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CarDto {
-  private Long id;
-  private String objectId;
-  private String brand;
+  private UUID id;
   private String model;
+  private BrandDto brandDto;
   private Year year;
-  private List<Category> categories;
+  private BigDecimal price;
+  private TransmissionType transmissionType;
+  private EngineType engineType;
+  private DriveType driveType;
+  private SteeringLocation steeringLocation;
+  private BigDecimal mileage;
+  private Integer color;
+  private String vin;
+  private String ownerName;
+  private Set<Category> categories;
 }

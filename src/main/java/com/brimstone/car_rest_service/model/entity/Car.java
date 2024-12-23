@@ -4,7 +4,6 @@ import com.brimstone.car_rest_service.model.enums.DriveType;
 import com.brimstone.car_rest_service.model.enums.EngineType;
 import com.brimstone.car_rest_service.model.enums.SteeringLocation;
 import com.brimstone.car_rest_service.model.enums.TransmissionType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,11 +16,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Year;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -40,20 +42,15 @@ import lombok.Setter;
 public class Car {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Schema(description = "Unique id in DB")
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
-  @Schema(description = "Unique sequence of characters and numbers")
-  private String objectId;
-
-  @Size(min = 0, max = 64)
   private String model;
 
-  @Size(min = 0, max = 32)
-  private String brand;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "brand_id")
+  private Brand brand;
 
-  @Schema(description = "Year of manufacture")
   private Year year;
 
   @Column(name = "price_in_usd")
@@ -77,16 +74,15 @@ public class Car {
   @Column(name = "color_rgb")
   private Integer color;
 
-  @Size(max = 128)
   private String ownerName;
 
   @Size(max = 17)
   private String vin;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   @JoinTable(
       name = "car_category",
       joinColumns = @JoinColumn(name = "car_id"),
       inverseJoinColumns = @JoinColumn(name = "category_id"))
-  private List<Category> categories;
+  private Set<Category> categories = new HashSet<>();
 }

@@ -6,5 +6,5 @@ public enum DriveType {
   _4WD("four-wheel drive"),
   AWD("all-wheel drive");
 
-  private DriveType(String label) {}
+  DriveType(String label) {}
 }

@@ -8,13 +8,11 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
-@Configuration
-@ConfigurationProperties(prefix = "keycloak")
-@Lazy
 @Getter
 @Setter
+@Configuration
+@ConfigurationProperties(prefix = "keycloak")
 public class KeycloakClientConfig {
 
   private String url;

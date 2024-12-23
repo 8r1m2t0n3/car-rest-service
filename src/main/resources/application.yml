@@ -7,7 +7,10 @@ env:
       port: 5434
 
 spring:
-  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -33,6 +36,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
-
-object-id.length: 10
-path.static.file.cars: "target/classes/static/cars.csv"

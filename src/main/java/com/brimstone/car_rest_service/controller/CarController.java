@@ -34,7 +34,7 @@ public class CarController implements CarOpenApi {
     return carService.save(carCreationDto);
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteCarById(@RequestParam UUID id) {
     carService.deleteById(id);

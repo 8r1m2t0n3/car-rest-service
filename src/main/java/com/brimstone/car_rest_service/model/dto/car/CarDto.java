@@ -1,7 +1,7 @@
 package com.brimstone.car_rest_service.model.dto.car;
 
 import com.brimstone.car_rest_service.model.dto.brand.BrandDto;
-import com.brimstone.car_rest_service.model.entity.Category;
+import com.brimstone.car_rest_service.model.dto.category.CategoryDto;
 import com.brimstone.car_rest_service.model.enums.DriveType;
 import com.brimstone.car_rest_service.model.enums.EngineType;
 import com.brimstone.car_rest_service.model.enums.SteeringLocation;
@@ -22,7 +22,7 @@ import lombok.Setter;
 public class CarDto {
   private UUID id;
   private String model;
-  private BrandDto brandDto;
+  private BrandDto brand;
   private Year year;
   private BigDecimal price;
   private TransmissionType transmissionType;
@@ -33,5 +33,5 @@ public class CarDto {
   private Integer color;
   private String vin;
   private String ownerName;
-  private Set<Category> categories;
+  private Set<CategoryDto> categories;
 }
